@@ -46,7 +46,7 @@ class FlightBookingModel {
     this._KEYS.forEach((key) => {
       this[key] = input[key] || "";
     });
-    this.validationErrors = []; //Add the field for storing validation errors
+    this.validationErrors = ["Content has not been validated"]; //Add the field for storing validation errors
     this._removeSpaces();
   }
 
@@ -60,6 +60,7 @@ class FlightBookingModel {
   }
 
   validate() {
+    this.validationErrors = []; //Remove error messages
     Object.entries(this).forEach(([key, value]) => {
       if (key[0] === "_") return; //Skip private fields
       if (!this._VALIDATOR_FNS[key]) return; //Skip fields which do not require validation
@@ -67,6 +68,10 @@ class FlightBookingModel {
         this.validationErrors.push(this._ERROR_MESSAGES[key]);
     });
     return this;
+  }
+
+  isValid() {
+    return this.validationErrors.length === 0;
   }
 
   log() {
@@ -82,7 +87,7 @@ class FlightBookingModel {
     Object.entries(this).forEach(([key, value]) => {
       if (key[0] === "_") return; //Skip private fields
       if (key === "validationErrors") {
-        //We handle this separately for better readibility
+        //Handle this separately for better readibility
         output.push(value.join(", "));
         return;
       }
@@ -102,6 +107,7 @@ class FlightBookingModel {
 }
 
 const flightBooking = new FlightBookingModel();
+console.log(flightBooking.isValid());
 flightBooking
   .parse(
     "A b h i s h e k , K u m a r , A B C 1 2 3 , F , 2 0 1 9 - 0 7 - 3 1 , 2 , 2 0 1 9 - 0 5 - 2 1 , abhishek@zzz.com, 9876543210, Economy"
@@ -109,3 +115,4 @@ flightBooking
   .validate()
   .log();
 console.log(flightBooking.stringify());
+console.log(flightBooking.isValid());
