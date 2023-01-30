@@ -116,13 +116,4 @@ class FlightBookingModel {
   }
 }
 
-const flightBooking = new FlightBookingModel();
-console.log(
-  flightBooking
-    .parse(
-      "Kalyani, Ben, A1B2C3, M, 2019-06-30, 1, 2019-05-21, kben@zzz.com, 9876543213, Premium Economy, OFFER_25"
-    )
-    .validate()
-    .addDiscountCode()
-    .stringify()
-);
+module.export = new FlightBookingModel();
