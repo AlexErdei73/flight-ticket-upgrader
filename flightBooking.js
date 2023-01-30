@@ -116,4 +116,4 @@ class FlightBookingModel {
   }
 }
 
-module.export = new FlightBookingModel();
+module.exports = new FlightBookingModel();
