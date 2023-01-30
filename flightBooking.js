@@ -17,7 +17,8 @@ class FlightBookingModel {
     PNR: (value) =>
       validator.isLength(value, { min: 6, max: 6 }) &&
       validator.isAlphanumeric(value),
-    Booked_cabin: (value) => true, //TODO
+    Booked_cabin: (value) =>
+      ["Economy", "Premium Economy", "Business", "First"].indexOf(value) !== -1,
   };
 
   constructor(input) {
@@ -87,7 +88,7 @@ const flightBooking = new FlightBookingModel({
   Ticketing_date: "2 0 2 2 - 1 1 - 0 9",
   Email: " b _ w i l l i s @ g m a i l . c o m ",
   Mobile_phone: " + 4 4 7 4 9 6 0 3 4 2 4 4 ",
-  Booked_cabin: "Premium Economy",
+  Booked_cabin: "Premium_Economy",
 });
 flightBooking.validate();
 flightBooking.log();
