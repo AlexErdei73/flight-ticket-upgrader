@@ -89,14 +89,6 @@ class FlightBookingModel {
     return this;
   }
 
-  log() {
-    Object.entries(this).forEach(([key, value]) => {
-      if (key[0] === "_") return; //Skip private fields
-      console.log(key, value);
-    });
-    return this;
-  }
-
   stringify() {
     const output = [];
     Object.entries(this).forEach(([key, value]) => {
