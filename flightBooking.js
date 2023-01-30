@@ -74,6 +74,21 @@ class FlightBookingModel {
     return this.validationErrors.length === 0;
   }
 
+  addDiscountCode() {
+    this.Discount_code = "";
+    if (!this.isValid()) return this;
+    if (/^[A-E]$/.test(this.Fare_class)) {
+      this.Discount_code = "OFFER_20";
+    }
+    if (/^[F-K]$/.test(this.Fare_class)) {
+      this.Discount_code = "OFFER_30";
+    }
+    if (/^[L-R]$/.test(this.Fare_class)) {
+      this.Discount_code = "OFFER_25";
+    }
+    return this;
+  }
+
   log() {
     Object.entries(this).forEach(([key, value]) => {
       if (key[0] === "_") return; //Skip private fields
@@ -87,10 +102,13 @@ class FlightBookingModel {
     Object.entries(this).forEach(([key, value]) => {
       if (key[0] === "_") return; //Skip private fields
       if (key === "validationErrors") {
-        //Handle this separately for better readibility
-        output.push(value.join(", "));
-        return;
+        if (!this.isValid()) {
+          //Handle this separately for better readibility
+          output.push(value.join(", "));
+          return;
+        } else return; //Skip validationErrors for valid fields
       }
+      if (key === "Discount_code" && !this.isValid()) return; //Skip Discount_code for validation error
       output.push(value);
     });
     return output.join(", ");
@@ -107,12 +125,12 @@ class FlightBookingModel {
 }
 
 const flightBooking = new FlightBookingModel();
-console.log(flightBooking.isValid());
-flightBooking
-  .parse(
-    "A b h i s h e k , K u m a r , A B C 1 2 3 , F , 2 0 1 9 - 0 7 - 3 1 , 2 , 2 0 1 9 - 0 5 - 2 1 , abhishek@zzz.com, 9876543210, Economy"
-  )
-  .validate()
-  .log();
-console.log(flightBooking.stringify());
-console.log(flightBooking.isValid());
+console.log(
+  flightBooking
+    .parse(
+      "Kalyani, Ben, A1B2C3, M, 2019-06-30, 1, 2019-05-21, kben@zzz.com, 9876543213, Premium Economy, OFFER_25"
+    )
+    .validate()
+    .addDiscountCode()
+    .stringify()
+);
