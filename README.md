@@ -85,10 +85,13 @@ other requirement was that the paradigm should be OOP. I created OOP solution,
 but it is just a simple OOP solution. It would have been more practical using
 TypeScript, so I could have used more sophisticated OOP tools and static types.
 I have not used TypeScript for a while, so I thought not to waste your time with
-that, this way it was faster for me. I used ES6 classes as JavaScript OOP
+that, this way it was faster. I used ES6 classes as JavaScript OOP
 syntax, which may remind you a bit of a TypeScript solution, but there are
 things missing here from the toolkit. In JS there are no access modifiers, with
-ES6 classes, like in TypeScript for example. JavaScript is also a weakly typed
+ES6 classes, like in TypeScript for example. In ES6 classes there is no true abstraction, 
+unless you apply tricks, which make the code noisy. Please do not call underscroed methods
+out of the object, as they are designed to be private. I also do not test these as they strictly 
+belong to the implementation details not the behaviour. JavaScript is also a weakly typed
 language, which can cause problems for beginners, who go against common sense. I
 tried not to do that, so I hopefully managed to give you a robust solution,
 which works exactly as you required. Please check it.
@@ -110,6 +113,7 @@ way, if it was crucial for the problem.
 
 ### How about testing
 
-Again for keep things simple, I have not made this solution with TDD. Although I
+Again for keeping things simple, I have not made this solution with TDD. Although I
 really like the testing first approach for building code, it would have slowed
-me down a bit. I include the automated unit tests for the data model.
+me down a bit. I include the automated unit tests for the data model and for the data
+processing too. An example input.csv file is part of the repository.
