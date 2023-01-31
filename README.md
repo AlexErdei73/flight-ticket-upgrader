@@ -88,9 +88,9 @@ I have not used TypeScript for a while, so I thought not to waste your time with
 that, this way it was faster. I used ES6 classes as JavaScript OOP
 syntax, which may remind you a bit of a TypeScript solution, but there are
 things missing here from the toolkit. In JS there are no access modifiers, with
-ES6 classes, like in TypeScript for example. In ES6 classes there is no true abstraction, 
+ES6 classes, like in TypeScript for example. In ES6 classes there is no true abstraction,
 unless you apply tricks, which make the code noisy. Please do not call underscroed methods
-out of the object, as they are designed to be private. I also do not test these as they strictly 
+out of the object, as they are designed to be private. I also do not test these as they strictly
 belong to the implementation details not the behaviour. JavaScript is also a weakly typed
 language, which can cause problems for beginners, who go against common sense. I
 tried not to do that, so I hopefully managed to give you a robust solution,
@@ -115,5 +115,9 @@ way, if it was crucial for the problem.
 
 Again for keeping things simple, I have not made this solution with TDD. Although I
 really like the testing first approach for building code, it would have slowed
-me down a bit. I include the automated unit tests for the data model and for the data
-processing too. An example input.csv file is part of the repository.
+me down a bit. I include the automated unit tests for the data model and example
+input.csv file is part of the repository. You can run the tests:
+
+```
+npm run test
+```
