@@ -34,23 +34,6 @@ class FlightBookingModel {
       ["Economy", "Premium Economy", "Business", "First"].indexOf(value) !== -1,
   };
 
-  constructor(input) {
-    if (!input) {
-      //Add empty strings to string fields for new instances without input to escape error
-      input = {};
-      this._KEYS.forEach((key) => {
-        input[key] = "";
-      });
-    }
-    // Initialize the string fields from input if fields exist otherwise empty strings
-    this._KEYS.forEach((key) => {
-      this[key] = input[key] || "";
-    });
-    this.validationErrors = []; //Add the field for storing validation errors
-    this._hasValidated = false;
-    this._removeSpaces();
-  }
-
   _removeSpaces() {
     Object.entries(this).forEach(([key, value]) => {
       if (key[0] === "_") return; //Skip private fields
@@ -79,7 +62,6 @@ class FlightBookingModel {
   addDiscountCode() {
     this.Discount_code = "";
     if (!this.isValid()) return this; //Skip adding any discount code for invalid data
-    if (!this.isValid()) return this;
     if (/^[A-E]$/.test(this.Fare_class)) {
       this.Discount_code = "OFFER_20";
     }
@@ -101,9 +83,9 @@ class FlightBookingModel {
           //Handle this separately for better readibility
           output.push(value.join(", "));
           return;
-        } else return; //Skip validationErrors for valid fields
+        } else return; //Skip validationErrors if data passed validation or no error message
       }
-      //Skip Discount_code for validation error or empty string value
+      //Skip Discount_code for invalid data or empty string value
       if (key === "Discount_code" && (!this.isValid() || value === "")) return;
       output.push(value);
     });
