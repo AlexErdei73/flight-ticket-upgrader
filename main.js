@@ -33,37 +33,47 @@ class Main {
     });
   }
 
+  _processInput() {
+    this._inputLines.forEach((line, index) => {
+      if (index === 0) {
+        //Skip first line, but add it in extended form to _outputLines and _failedLines
+        this._outputLines.push(line + ", Discount_code");
+        this._failedLines.push(line + ", Error(s)");
+        return;
+      }
+      const nextLine = flightBookingData
+        .parse(line)
+        .validate()
+        .addDiscountCode()
+        .stringify();
+      if (flightBookingData.isValid()) this._outputLines.push(nextLine);
+      else this._failedLines.push(nextLine);
+    });
+  }
+
+  _writeOutput(callback) {
+    const OUTPUT_FILENAME = "output.csv";
+    const FAILED_FILENAME = "falied.csv";
+    this._writeFile(OUTPUT_FILENAME, this._outputLines, (err) => {
+      if (err) {
+        return callback(err);
+      }
+      this._writeFile(FAILED_FILENAME, this._failedLines, (err) => {
+        if (err) {
+          return callback(err);
+        }
+        return callback(null);
+      });
+    });
+  }
+
   exec(callback) {
     this._readInput("input.csv", (err) => {
       if (err) {
         return callback(err);
       }
-      this._inputLines.forEach((line, index) => {
-        if (index === 0) {
-          //Skip first line, but add it in extended form to _outputLines and _failedLines
-          this._outputLines.push(line + ", Discount_code");
-          this._failedLines.push(line + ", Error(s)");
-          return;
-        }
-        const nextLine = flightBookingData
-          .parse(line)
-          .validate()
-          .addDiscountCode()
-          .stringify();
-        if (flightBookingData.isValid()) this._outputLines.push(nextLine);
-        else this._failedLines.push(nextLine);
-      });
-      this._writeFile("output.csv", this._outputLines, (err) => {
-        if (err) {
-          return callback(err);
-        }
-        this._writeFile("failed.csv", this._failedLines, (err) => {
-          if (err) {
-            return callback(err);
-          }
-          return callback(null);
-        });
-      });
+      this._processInput();
+      this._writeOutput(callback);
     });
   }
 }
