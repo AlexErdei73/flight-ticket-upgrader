@@ -46,7 +46,8 @@ class FlightBookingModel {
     this._KEYS.forEach((key) => {
       this[key] = input[key] || "";
     });
-    this.validationErrors = ["Content has not been validated"]; //Add the field for storing validation errors
+    this.validationErrors = []; //Add the field for storing validation errors
+    this._hasValidated = false;
     this._removeSpaces();
   }
 
@@ -67,15 +68,17 @@ class FlightBookingModel {
       if (!this._VALIDATOR_FNS[key](value))
         this.validationErrors.push(this._ERROR_MESSAGES[key]);
     });
+    this._hasValidated = true;
     return this;
   }
 
   isValid() {
-    return this.validationErrors.length === 0;
+    return this._hasValidated && this.validationErrors.length === 0;
   }
 
   addDiscountCode() {
     this.Discount_code = "";
+    if (!this.isValid()) return this; //Skip adding any discount code for invalid data
     if (!this.isValid()) return this;
     if (/^[A-E]$/.test(this.Fare_class)) {
       this.Discount_code = "OFFER_20";
@@ -94,13 +97,14 @@ class FlightBookingModel {
     Object.entries(this).forEach(([key, value]) => {
       if (key[0] === "_") return; //Skip private fields
       if (key === "validationErrors") {
-        if (!this.isValid()) {
+        if (!this.isValid() && this.validationErrors.length !== 0) {
           //Handle this separately for better readibility
           output.push(value.join(", "));
           return;
         } else return; //Skip validationErrors for valid fields
       }
-      if (key === "Discount_code" && !this.isValid()) return; //Skip Discount_code for validation error
+      //Skip Discount_code for validation error or empty string value
+      if (key === "Discount_code" && (!this.isValid() || value === "")) return;
       output.push(value);
     });
     return output.join(", ");
@@ -112,6 +116,7 @@ class FlightBookingModel {
       this[key] = input[index];
     });
     this._removeSpaces();
+    this._hasValidated = false;
     return this;
   }
 }
